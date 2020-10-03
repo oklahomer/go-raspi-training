@@ -83,7 +83,7 @@ export  gpiochip0  gpiochip504  unexport
 ```
 
 ## Go implementation with periph.io
-Take a look at [Read tactile switch state](https://github.com/oklahomer/go-raspi-training/#cross-compile) to cross-compile and transfer the example code.
+Take a look at [Cross Compile](https://github.com/oklahomer/go-raspi-training/#cross-compile) to cross-compile and transfer the example code.
 The corresponding Go code is located at [/example/002-read-tactile-switch/main.go](https://github.com/oklahomer/go-raspi-training/blob/master/example/002-read-tactile-switch/main.go).
 
 Login and execute the transferred executable.

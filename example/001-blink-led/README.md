@@ -51,7 +51,7 @@ export  gpiochip0  gpiochip504  unexport
 ```
 
 ## Go implementation with periph.io
-Take a look at [Read tactile switch state](https://github.com/oklahomer/go-raspi-training/#cross-compile) to cross-compile and transfer the example code.
+Take a look at [Cross Compile](https://github.com/oklahomer/go-raspi-training/#cross-compile) to cross-compile and transfer the example code.
 
 Login and execute the transferred executable.
 By its execution, files and directories under `/sys/class/gpio/` are implicitly initialized.

@@ -2,4 +2,7 @@ module go-raspi-training
 
 go 1.14
 
-require periph.io/x/periph v3.6.2+incompatible // indirect
+require (
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+	periph.io/x/periph v3.6.4+incompatible
+)

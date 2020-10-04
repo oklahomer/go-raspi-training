@@ -23,7 +23,17 @@ import (
 //   50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 //   60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 //   70: -- -- -- -- -- -- -- --
+//
+// For options, see "SERIAL BUS ADDRESS" section of the data sheet at
+// https://www.analog.com/media/en/technical-documentation/data-sheets/ADT7410.pdf
 const Address = 0x48
+
+const (
+	// TemperatureValueRegisterAddress is the register address to read the temperature
+	TemperatureValueRegisterAddress = 0x00
+	// ConfigurationRegisterAddress is the register address to write the preferred configuration
+	ConfigurationRegisterAddress = 0x03
+)
 
 func main() {
 	// Initialize the library and load all available drivers
@@ -48,7 +58,15 @@ func main() {
 	// Setup a I²C device on the bus
 	device := &i2c.Dev{Bus: bus, Addr: Address}
 
-	// Measure temperature
+	// Switch to 16-bit mode more higher resolution.
+	// "The number of bits in the temperature data-word can be extended
+	// to 16 bits, twos complement, by setting Bit 7 to 1 in the configuration register (Register Address 0x03)."
+	err = device.Tx([]byte{ConfigurationRegisterAddress, 0x80}, nil)
+	if err != nil {
+		log.Printf("Failed to write to configuration register: %v", err)
+	}
+
+	// Measure temperature every 3 seconds
 	ticker := time.NewTicker(3 * time.Second)
 	defer ticker.Stop()
 
@@ -60,7 +78,8 @@ LOOP:
 	for {
 		select {
 		case <-ticker.C:
-			write := []byte{0x00}
+			write := []byte{TemperatureValueRegisterAddress}
+			// Read the whole 16bits
 			read := make([]byte, 2)
 			err = device.Tx(write, read)
 			if err != nil {
@@ -68,7 +87,10 @@ LOOP:
 				continue
 			}
 
+			// 16-bit mode uses the entire 16 bits to represent the current temperature.
 			tmp := uint16(read[0])<<8 | uint16(read[1])
+
+			// Convert to human readable units
 			tmpC := float32(tmp) / 128
 			tmpF := tmpC*1.8 + 32
 

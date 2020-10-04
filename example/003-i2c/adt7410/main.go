@@ -87,9 +87,19 @@ LOOP:
 				continue
 			}
 
-			// 16-bit mode uses the entire 16 bits to represent the current temperature.
-			tmp := uint16(read[0])<<8 | uint16(read[1])
-
+			// 16-bit mode uses the entire 16 bits to represent the current temperature, having the MSB as sign bit.
+			// When MSB is 1, the temperature is negative.
+			// See "TEMPERATURE DATA FORMAT" and "TEMPERATURE CONVERSION FORMULAS" in data sheet at
+			// https://www.analog.com/media/en/technical-documentation/data-sheets/ADT7410.pdf
+			//
+			// For further operation to handle negative temperature value, expand unsigned 16-bit value to int32.
+			tmp := int32(uint16(read[0])<<8 | uint16(read[1]))
+			// Positive Temperature = ADC Code (dec)/128
+			// Negative Temperature = (ADC Code (dec) − 65,536)/128
+			// where ADC Code uses all 16 bits of the data byte, including the sign bit.
+			if tmp > 32_768 {
+				tmp -= 65_536
+			}
 			// Convert to human readable units
 			tmpC := float32(tmp) / 128
 			tmpF := tmpC*1.8 + 32

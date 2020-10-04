@@ -63,7 +63,7 @@ func main() {
 	// to 16 bits, twos complement, by setting Bit 7 to 1 in the configuration register (Register Address 0x03)."
 	err = device.Tx([]byte{ConfigurationRegisterAddress, 0x80}, nil)
 	if err != nil {
-		log.Printf("Failed to write to configuration register: %v", err)
+		log.Fatalf("Failed to write to configuration register: %v", err)
 	}
 
 	// Measure temperature every 3 seconds

@@ -11,6 +11,7 @@ This project aims to prep the author to use Golang for Raspberry Pi interaction.
 # Examples
 - [Blink LED](https://github.com/oklahomer/go-raspi-training/tree/master/example/001-blink-led)
 - [Read tactile switch state](https://github.com/oklahomer/go-raspi-training/tree/master/example/002-read-tactile-switch)
+- [Measure temperature with ADT7410](https://github.com/oklahomer/go-raspi-training/tree/master/example/003-i2c/adt7410)
 
 # Cross Compile
 Take a look at `uname -a` output to decide options to cross-compile Go code.
